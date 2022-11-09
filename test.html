@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    .imgCanvas {
+      position: fixed;
+      width: 200px;
+      z-index: 100;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 图片 -->
+  <canvas id="imgCanvas" class="imgCanvas"> </canvas>
+</body>
+<script>
+  //绘制图片
+  //获取Canvas对象(画布)
+  var imgCanvas = document.getElementById("imgCanvas");
+  //简单地检测当前浏览器是否支持Canvas对象，以免在一些不支持html5的浏览器中提示语法错误
+  if (imgCanvas.getContext) {
+    //获取对应的CanvasRenderingContext2D对象(画笔)
+    var ctx = imgCanvas.getContext("2d");
+
+    //创建新的图片对象
+    var img = new Image();
+    //指定图片的URL
+    img.src = './20220910115542.jpg';
+    img.setAttribute("width", "300px");
+    img.setAttribute("height", "500px");
+
+    // imgCanvas.toDataURL("image/png")
+    //浏览器加载图片完毕后再绘制图片
+    img.onload = function () {
+      //以Canvas画布上的坐标(10,10)为起始点，绘制图像
+      ctx.drawImage(img, 10, 10);
+    };
+  }
+</script>
+
+</html>
