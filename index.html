@@ -113,7 +113,6 @@
   }
 
   function createRanImg(imgSrc) {
-    setTimeout(function () {
       let top = Math.round(Math.random() * (document.body.clientHeight - 200) + 100);
       let left = Math.round(Math.random() * (document.body.clientWidth - 200) + 100);
       let img = document.createElement('img');
@@ -127,7 +126,6 @@
       let container = document.querySelector('#jsi-cherry-container');
       let pinkboard = document.querySelector('#pinkboard');
       container.insertBefore(img, pinkboard);
-    }, 200)
   }
 
   function removeRanImg() {
