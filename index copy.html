@@ -18,8 +18,6 @@
     padding: 0;
     margin: 0;
     background: #000;
-    overflow-y: hidden;
-    overflow-x: hidden;
   }
 
   .tip {
@@ -31,36 +29,15 @@
   }
 
   .container {
-    position: relative;
     width: 100%;
     height: 100%;
   }
 
-  .container canvas {
+  canvas {
     z-index: 99;
     position: absolute;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    transition: all .5s;
-    animation: heartDump .5s infinite alternate forwards;
-  }
-
-  /* 心跳动画 */
-  @keyframes heartDump {
-    0% {
-      transform: scale(1);
-    }
-
-    50% {
-      overflow-x: visible;
-      overflow-y: visible;
-      transform: scale(1.1);
-    }
-
-    100% {
-      transform: scale(1);
-    }
   }
 </style>
 
@@ -75,7 +52,7 @@
       您的浏览器不支持播放声音
     </audio>
     <!-- 爱心 -->
-    <canvas id="pinkboard" class="pinkboard"> </canvas>
+    <canvas id="pinkboard" class="container"> </canvas>
   </div>
 
 </body>
@@ -84,7 +61,8 @@
 <script>
 
   let imgSrc1 = './caiwenji.jpg'
-  let imgSrc2 = './lan.jpg'
+  let imgSrc2 = './caiwenji.jpg'
+  // let imgSrc2 = './lan.jpg'
   //音频
   document.addEventListener('click', musicPlay);
   function musicPlay() {
@@ -120,24 +98,58 @@
       //删除图片
       removeRanImg();
     }, 1500)
+
   }
 
-  function createRanImg(imgSrc) {
-    setTimeout(function () {
-      let top = Math.round(Math.random() * (document.body.clientHeight - 200) + 100);
-      let left = Math.round(Math.random() * (document.body.clientWidth - 200) + 100);
-      let img = document.createElement('img');
-      img.src = imgSrc;
-      img.style.position = 'fixed';
-      img.style.width = '10%';
-      img.style.top = top + 'px';
-      img.style.left = left + 'px';
-      img.style.transition = 'all 0.5s';
-      img.style.opacity = 0.3;
-      let container = document.querySelector('#jsi-cherry-container');
-      let pinkboard = document.querySelector('#pinkboard');
-      container.insertBefore(img, pinkboard);
-    }, 200)
+
+  //参数为二进制图片流
+  function getImageSize(url) {
+    return new Promise(function (resolve, reject) {
+      let image = new Image();
+      image.onload = function () {
+        resolve({
+          width: image.width,
+          height: image.height
+        });
+      };
+      image.onerror = function () {
+        reject(new Error('error'));
+      };
+      image.src = url;
+    });
+  }
+
+  async function createRanImg(imgSrc) {
+    //获取图片的大小
+    let size = await getImageSize(imgSrc);
+    let xArr = [];
+    let yArr = [];
+    let img = document.createElement('img');
+    img.src = imgSrc;
+    img.style.position = 'fixed';
+    img.style.width = '10%';
+
+    for (let i = 0; i < Math.round(document.body.clientWidth / Math.round(document.body.clientWidth * 0.1)); i++) {
+      xArr.push(i * (document.body.clientWidth * 0.1));
+    }
+
+    for (let i = 0; i < Math.round(document.body.clientHeight / Math.round(document.body.clientHeight * (Math.round(document.body.clientWidth * 0.1) / size.width))); i++) {
+      yArr.push(i * Math.round(document.body.clientHeight * Math.round(document.body.clientWidth * 0.1) / size.width));
+    }
+    console.log(xArr, yArr);
+
+    let top = Math.round(Math.random() * (yArr.length - 1));
+    let left = Math.round(Math.random() * (xArr.length - 1));
+
+
+    img.style.top = yArr[top] + 'px';
+    img.style.left = xArr[left] + 'px';
+    img.style.transition = 'all 0.5s';
+    img.style.opacity = 0.3;
+    let container = document.querySelector('#jsi-cherry-container');
+    let pinkboard = document.querySelector('#pinkboard');
+    container.insertBefore(img, pinkboard);
+
   }
 
   function removeRanImg() {
@@ -351,7 +363,6 @@
 
     // creating the particle image using a dummy canvas
     var image = (function () {
-      //每一次都新建canvas,解决刷新屏闪动
       var canvas = document.createElement("canvas"),
         context = canvas.getContext("2d");
       canvas.width = settings.particles.size;
@@ -421,8 +432,8 @@
 
     // handle (re-)sizing of the canvas
     function onResize() {
-      canvas.width = canvas.clientWidth * 1.3;
-      canvas.height = canvas.clientHeight * 1.3;
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
     }
     window.onresize = onResize;
 
