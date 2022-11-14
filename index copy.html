@@ -30,6 +30,7 @@
   }
 
   .container {
+    position: relative;
     width: 100%;
     height: 100%;
   }
@@ -153,8 +154,8 @@
       xArr.push(i * (document.body.clientWidth * 0.1));
     }
 
-    for (let i = 0; i < Math.round(document.body.clientHeight / Math.round(size.height * ((document.body.clientWidth * 0.1) / size.width))); i++) {
-      yArr.push(i * Math.round(size.height * (document.body.clientWidth * 0.1) / size.width));
+    for (let i = 0; i < Math.round(document.body.clientHeight / Math.round(size.height * (Math.round(document.body.clientWidth * 0.1) / size.width))); i++) {
+      yArr.push(i * Math.round(size.height * Math.round(document.body.clientWidth * 0.1) / size.width));
     }
     console.log(xArr, yArr);
 
