@@ -8,4 +8,4 @@
 ### 效果一预览地址
 [效果一](https://zhudunfeng.github.io/heart/)
 ### 效果二预览地址
-[效果二](https://zhudunfeng.github.io/heart/index copy.html)
+[效果二](https://zhudunfeng.github.io/heart/index%20copy.html)
